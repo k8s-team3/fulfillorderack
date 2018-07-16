@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fulfillorder
+spec:
+  replicas: 3
+  minReadySeconds: 10
+  selector:
+    matchLabels:
+      app: fulfillorder-app
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: fulfillorder-app
+    spec:
+      containers:
+      - name: fulfillorder-pod
+        image: hanepeckham/fulfillorderack:v8
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGOHOST
+          value: "mongodb://k8steamdb-mongodb.default.svc.cluster.local"
+        - name: TEAMNAME
+          value: "team3"
