@@ -21,6 +21,9 @@ spec:
       containers:
       - name: fulfillorder-pod
         image: hanepeckham/fulfillorderack:v8
+        volumeMounts:
+        - mountPath: "/mnt/azure"
+          name: volume
         ports:
         - containerPort: 8080
         env:
@@ -28,3 +31,7 @@ spec:
           value: "mongodb://k8steamdb-mongodb.default.svc.cluster.local"
         - name: TEAMNAME
           value: "team3"
+      volumes:
+        - name: volume
+        persistentVolumeClaim:
+          claimName: azurefile
